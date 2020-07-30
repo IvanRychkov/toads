@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from matplotlib.ticker import PercentFormatter
 from itertools import chain
+from collections import defaultdict
 
 
 def desc(df):
