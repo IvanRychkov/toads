@@ -5,6 +5,7 @@ from matplotlib.ticker import PercentFormatter
 from itertools import chain
 from collections import defaultdict
 import numpy as np
+from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 
 
 def desc(df):
