@@ -1,12 +1,13 @@
 """Модуль содержит функции-помощники для Data Science"""
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from matplotlib.ticker import PercentFormatter
 from itertools import chain
 from collections import defaultdict
 import numpy as np
 import pandas as pd
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score, roc_auc_score
+from IPython.display import display
+import seaborn as sns
 
 
 def desc(df):
@@ -58,38 +59,7 @@ def na_part(data, column):
     """
     print('Доля пропусков в столбце "{}" равна {:.1%}'
           .format(column, data[column].isna().sum() / len(data)))
-    
-    
-def multiplot(dfs: list, labels: list, vals: str, groupers: dict, af='mean', plotmap=None):
-    # На случай отсутствия названий таблиц
-    if len(labels) < len(dfs):
-        labels = ['таблица {}'.format(x + 1) for x, _ in enumerate(dfs)]
-        # По умолчанию график-линия для всего
-    if not plotmap:
-        plotmap = 'p' * len(groupers)
-        # Проходимся по каждому группировочному столбцу данных
-    for grouper, name, pt in zip(groupers.keys(), groupers.values(), plotmap):
-        # Рисуем таблицу для этого столбца
-        figure()
-        # Задаём непрозрачность
-        ap = 1.0
-        # Совмещаем столбцы с названиями через zip
-        for df, lb in zip(dfs, labels):
-            lb = lb if lb else df.name
-            if pt == 'p':
-                # Делаем сводную таблицу
-                pvt = df.pivot_table(index=grouper, values=vals, aggfunc=af)
-                plt.plot(vals, data=pvt, label=lb, alpha=ap)
-                # Немного уменьшаем непрозрачность для каждого следующего графика
-                ap -= 0.09
-            if pt == 's':
-                ap -= 0.35
-                plt.scatter(grouper, vals, data=df, label=lb, alpha=ap)
-            if pt == 'b':
-                plt.bar(grouper, vals, data=df, label=lb, alpha=ap)
-            # Отображаем рисунок
-        show(name, True, 'f')
-        
+
 
 def median_fill_by_cat(df, target_column, cat_column):
     """Заполнение медианой по категории (таблица, столбец с пустыми значениями, столбец с категориями)"""
@@ -228,7 +198,7 @@ class Image:
             plt.gca().yaxis.set_major_formatter(formatter)
 
 
-def first_look(df: 'pandas.DataFrame') -> None:
+def first_look(df: 'pd.DataFrame') -> None:
     """Выводит наиболее популярные сведения о датафрейме."""
     df.info()
     print('-' * 50)
