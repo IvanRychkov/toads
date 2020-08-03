@@ -54,11 +54,17 @@ def hypo(test, alpha=0.05, oneside=False, show=True):
         return result
     
 
-def na_part(data, column):
+def na_part(data, verbose=False):
     """Возвращает долю пропусков в столбце датафрейма.
+    
+    verbose - печатает или возвращает значение
     """
-    print('Доля пропусков в столбце "{}" равна {:.1%}'
-          .format(column, data[column].isna().sum() / len(data)))
+    part = data.isna().sum() / len(data)
+    if verbose:
+        print('Доля пропусков в столбце "{}" равна {:.1%}'
+              .format(column, part))
+    else:
+        return part
 
 
 def median_fill_by_cat(df, target_column, cat_column):
