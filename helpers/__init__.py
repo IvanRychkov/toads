@@ -55,14 +55,14 @@ def hypo(test, alpha=0.05, oneside=False, show=True):
     
 
 def na_part(data, verbose=False):
-    """Возвращает долю пропусков в столбце датафрейма.
+    """Агрегирует долю пропусков в объектах pandas.
     
     verbose - печатает или возвращает значение
     """
     part = data.isna().sum() / len(data)
     if verbose:
         print('Доля пропусков в столбце "{}" равна {:.1%}'
-              .format(column, part))
+              .format(data.name, part))
     else:
         return part
 
