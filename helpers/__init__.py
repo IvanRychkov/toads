@@ -1,5 +1,6 @@
 """Модуль содержит функции-помощники для Data Science"""
 import matplotlib.pyplot as plt
+from matplotlib.ticker import PercentFormatter
 from sklearn.model_selection import train_test_split
 from itertools import chain
 from collections import defaultdict
@@ -12,8 +13,10 @@ import seaborn as sns
 
 def desc(df):
     """Возвращает транспонированный describe()
+    
+    Добавляет строку с долей пропусков для каждого столбца.
     """
-    return df.describe().transpose()
+    return df.describe().append(df.agg([na_part])).transpose()
         
         
 def distr(column):
@@ -31,21 +34,21 @@ def distr(column):
     }
 
 
-def hypo(test, alpha=0.05, oneside=False, show=True):
+def hypo(test, alpha=0.05, oneside=False, verbose=True):
     """Сравнивает p-value с уровнем значимости. Проверяет гипотезу.
     
     alpha: уровень значимости
     
     oneside: делит p-value пополам
     
-    show: печатает либо возвращает bool
+    verbose: печатает либо возвращает bool
     """
     if isinstance(test, tuple):
         pv = test[1]
     else:
         pv = test.pvalue if not oneside else test.pvalue / 2
     result = pv > alpha
-    if show:
+    if verbose:
         print('p-value =', pv)
         print('p-value',
               '>' if result else '<',
@@ -67,14 +70,14 @@ def na_part(data, verbose=False):
         return part
 
 
-def median_fill_by_cat(df, target_column, cat_column):
-    """Заполнение медианой по категории (таблица, столбец с пустыми значениями, столбец с категориями)"""
+def agg_fill_by_cat(df, target_column, cat_column, aggfunc='median'):
+    """Заполнение результатом aggfunc по категории (таблица, столбец с пустыми значениями, столбец с категориями)"""
     # Для каждой категории, где есть пустые значения в целевом столбце:
     for cat in df[df[target_column].isna()][cat_column].unique():
         # Заполняем в целевом столбце пропуски медианой, соответствующей этой категории
         df.loc[df.loc[:, cat_column] == cat, target_column] =\
         df.loc[df.loc[:, cat_column] == cat, target_column].fillna(
-            df.loc[df.loc[:, cat_column] == cat, target_column].median())
+            df.loc[df.loc[:, cat_column] == cat, target_column].agg(aggfunc))
 
 
 def fill_from(row, by, what, source):
@@ -195,9 +198,8 @@ class Image:
             plt.ylabel(y, **y_kws if y_kws else {}) if y != 0 else plt.ylabel(None)
             
     @staticmethod
-    def format_axis(axis, formatter):
-        """Форматирует ось форматтером из matplotlib
-        """
+    def format_axis(axis, formatter=PercentFormatter(xmax=1, decimals=0)):
+        """Форматирует ось форматтером из matplotlib"""
         if axis in [0, 'x']:
             plt.gca().xaxis.set_major_formatter(formatter)
         if axis in [1, 'y']:
@@ -221,3 +223,36 @@ def first_look(df: 'pd.DataFrame') -> None:
     display(df.corr())
     sns.pairplot(df)
     print()
+
+
+def print_shapes(*arrays):
+    """Принимает список массивов и печатает их размеры."""
+    for a in arrays:
+        print(a.shape)
+
+
+def ci_strip(data, ci=0.95, subset: 'list(str)'=None):
+    """Принимает набор данных и возвращает значения, лежащие в доверительном интервале.
+    
+    data: {pd.DataFrame, array-like}
+    subset: [str] = список столбцов, по которым идёт отсечка."""
+    # Если датафрейм
+    if isinstance(data, pd.DataFrame):
+        df = data.copy()
+        columns = subset if subset else df.columns
+        for col in columns:                              # Для каждого столбца
+            df = df.loc[ci_strip(df[col], ci=ci).index]  # Оставить индексы в доверительном интервале
+        return df
+    else:
+        lower = (1 - ci) / 2
+        upper = 1 - lower
+        return data[(np.quantile(data, lower) <= data) &\
+                    (data <= np.quantile(data, upper))]
+
+
+def smape(true, preds):
+    """Symmetric Mean Absolute Percentage Error, симметричное среднее абсолютное процентное отклонение.
+    
+    Она похожа на MAE, но выражается не в абсолютных величинах, а в относительных. Одинаково учитывает масштаб и целевого признака, и предсказания."""
+    return np.nanmean([np.abs(t - p) / ((np.abs(t) + np.abs(p)) / 2)
+                       for t, p in zip(true, preds)])
