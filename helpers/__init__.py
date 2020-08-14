@@ -256,3 +256,33 @@ def smape(true, preds):
     Она похожа на MAE, но выражается не в абсолютных величинах, а в относительных. Одинаково учитывает масштаб и целевого признака, и предсказания."""
     return np.nanmean([np.abs(t - p) / ((np.abs(t) + np.abs(p)) / 2)
                        for t, p in zip(true, preds)])
+
+
+def train_model_cv(model, x, y, scorer, features=None, cv=5, **cv_kws):
+    """Обучает модель с возможностью выбора признаков. Проверяет кросс-валидацией. Возвращает среднее значение метрики качества."""
+    if features is None:
+        features = x.columns
+    return np.abs(np.mean(cross_val_score(model, x[features], y, cv=cv, scoring=scorer, **cv_kws)))
+
+
+def batch_train_cv(models, train_func: train_model_cv, names=None, greater_is_better=False, **train_kws):
+    """Обучает модели из списка, собирает результаты в Series."""
+    scores = []
+    for model in models:
+        scores.append(train_func(model, **train_kws))
+    return pd.Series(scores, index=models if names is None else names, name='score').sort_values(ascending=not greater_is_better)
+
+
+def dist_compare(true, preds, hypothesis=True, image='dist', **img_kws):
+    """Рисует распределения ответов модели и реальных значений целевого признака.
+    Проверяет сходство выборок критерием Манна-Уитни."""
+    if image:
+        with Image(legend='a' if image=='dist' else None, **img_kws):
+            if image == 'dist':
+                sns.distplot(true, label='true')
+                sns.distplot(preds, label='preds')
+            if image=='box':
+                sns.boxplot(data=[true, preds], orient='h')
+                plt.yticks([0, 1], ['true', 'preds'])
+    if hypothesis:
+        hypo(mannwhitneyu(true, preds))
