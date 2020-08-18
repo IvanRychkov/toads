@@ -254,8 +254,7 @@ def smape(true, preds):
     """Symmetric Mean Absolute Percentage Error, симметричное среднее абсолютное процентное отклонение.
     
     Она похожа на MAE, но выражается не в абсолютных величинах, а в относительных. Одинаково учитывает масштаб и целевого признака, и предсказания."""
-    return np.nanmean([np.abs(t - p) / ((np.abs(t) + np.abs(p)) / 2)
-                       for t, p in zip(true, preds)])
+    return np.nanmean(np.abs(true - preds) / ((np.abs(true) + np.abs(preds)) / 2))
 
 
 def train_model_cv(model, x, y, scorer, features=None, cv=5, **cv_kws):
