@@ -1,8 +1,8 @@
 from scipy.stats import mannwhitneyu
 
-from .image import Image
+from helpers.image import Image
 import seaborn as sns
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 
 def hypo(test, alpha=0.05, oneside=False, verbose=True):

@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
-
 class Image:
     """Даёт доступ к функциям для удобной отрисовки, поддерживает конструкцию with...as.
     -----
