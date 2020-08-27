@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
+
 class Image:
     """Даёт доступ к функциям для удобной отрисовки, поддерживает конструкцию with...as.
     -----
@@ -64,3 +65,6 @@ class Image:
             plt.gca().xaxis.set_major_formatter(formatter)
         if axis in [1, 'y']:
             plt.gca().yaxis.set_major_formatter(formatter)
+
+
+__all__ = ['Image']

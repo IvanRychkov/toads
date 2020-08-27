@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+
 def agg_fill_by_cat(df, target_column, cat_column, aggfunc='median'):
     """Заполнение результатом aggfunc по категории (таблица, столбец с пустыми значениями, столбец с категориями)"""
     # Для каждой категории, где есть пустые значения в целевом столбце:
@@ -40,5 +41,8 @@ def ci_strip(data, ci=0.95, subset: 'list[str]' = None):
     else:
         lower = (1 - ci) / 2
         upper = 1 - lower
-        return data[(np.quantile(data, lower) <= data) & \
+        return data[(np.quantile(data, lower) <= data) &
                     (data <= np.quantile(data, upper))]
+
+
+__all__ = ['ci_strip', 'fill_from', 'agg_fill_by_cat']

@@ -61,7 +61,8 @@ def smape(true, preds):
 
 
 def train_model_cv(model, x, y, scorer, features=None, cv=5, **cv_kws):
-    """Обучает модель с возможностью выбора признаков. Проверяет кросс-валидацией. Возвращает среднее значение метрики качества."""
+    """Обучает модель с возможностью выбора признаков. Проверяет кросс-валидацией. Возвращает среднее значение
+    метрики качества. """
     if features is None:
         features = x.columns
     return np.abs(np.mean(cross_val_score(model, x[features], y, cv=cv, scoring=scorer, **cv_kws)))
@@ -73,3 +74,6 @@ def batch_train_cv(models, train_func: train_model_cv, names=None, greater_is_be
     for model in models:
         scores.append(train_func(model, **train_kws))
     return pd.Series(scores, index=models if names is None else names, name='score').sort_values(ascending=not greater_is_better)
+
+
+# TODO: __all__

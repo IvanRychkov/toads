@@ -63,3 +63,6 @@ def print_shapes(*arrays):
     """Принимает список массивов и печатает их размеры."""
     for a in arrays:
         print(a.shape)
+
+
+# TODO: __all__

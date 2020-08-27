@@ -43,3 +43,6 @@ class RandomCipher:
         # Если нет обратной, повторяем
         except np.linalg.LinAlgError:
             self.__make_matrix(X)
+
+
+__all__ = ['RandomCipher']
