@@ -44,4 +44,4 @@ def dist_compare(true, preds, hypothesis=True, image='dist', **img_kws):
         hypo(mannwhitneyu(true, preds))
 
 
-__all__ = [dist_compare, hypo]
+__all__ = ['dist_compare', 'hypo']
