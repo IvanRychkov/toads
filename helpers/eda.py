@@ -65,4 +65,4 @@ def print_shapes(*arrays):
         print(a.shape)
 
 
-# TODO: __all__
+__all__ = ['desc', 'dist_stats', 'first_look', 'na_part', 'print_shapes']
