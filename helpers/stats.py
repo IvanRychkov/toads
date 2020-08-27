@@ -42,3 +42,6 @@ def dist_compare(true, preds, hypothesis=True, image='dist', **img_kws):
                 plt.yticks([0, 1], ['true', 'preds'])
     if hypothesis:
         hypo(mannwhitneyu(true, preds))
+
+
+__all__ = [dist_compare, hypo]
