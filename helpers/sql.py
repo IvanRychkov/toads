@@ -90,7 +90,11 @@ class AQuery:
     #     {conditions}
 
     def __str__(self):
-        return self.query.lower() if self.lowercase else self.query + ';'
+        return self.query.lower() if self.lowercase else self.query +\
+                                                         'Empty AQuery' if self._is_empty else ';'
+
+    def __repr__(self):
+        return self.__str__()
 
 
-__all__ = [AQuery]
+__all__ = ['AQuery']
