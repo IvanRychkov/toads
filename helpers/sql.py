@@ -19,10 +19,10 @@ class AQuery:
         self.query += ' '.join([clause, str(value), postfix]).strip()
         return self
 
-    def select(self, target: 'list[str]' = '*', distinct=False):
+    def select(self, target: str or 'list[str]' = '*', distinct=False):
         """SELECT target columns."""
         target = ', '.join(target)
-        clause = self.__SELECT_DISTINCT[distinct]
+        clause = AQuery.__SELECT_DISTINCT[distinct]
         return self._append(clause, target)
 
     def select_as(self, target_map: 'dict[str, str]', distinct=False):
@@ -90,11 +90,8 @@ class AQuery:
     #     {conditions}
 
     def __str__(self):
-        return self.query.lower() if self.lowercase else self.query +\
-                                                         'Empty AQuery' if self._is_empty else ';'
+        return (self.query.lower() if self.lowercase else self.query) +\
+                                                         ('AQuery is empty.' if self._is_empty else ';')
 
     def __repr__(self):
         return self.__str__()
-
-
-__all__ = ['AQuery']
