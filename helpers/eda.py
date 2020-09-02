@@ -17,7 +17,7 @@ def na_part(data, verbose=False):
         return part
 
 
-def desc(df):
+def describe(df):
     """Возвращает транспонированный describe()
 
     Добавляет строку с долей пропусков для каждого столбца.
@@ -40,7 +40,7 @@ def dist_stats(column):
     }
 
 
-def first_look(df: pd.DataFrame()) -> None:
+def first_look(df: pd.DataFrame(), scatter_matrix=True) -> None:
     """Выводит наиболее популярные сведения о датафрейме."""
     df.info()
     print('-' * 50)
@@ -51,11 +51,12 @@ def first_look(df: pd.DataFrame()) -> None:
     display(df.nunique())
     print('-' * 50)
     print('describe()')
-    display(df.describe().transpose())
+    display(describe(df))
     print('-' * 50)
     print('corr()')
     display(df.corr())
-    sns.pairplot(df)
+    if scatter_matrix:
+        sns.pairplot(df)
     print()
 
 
@@ -65,4 +66,4 @@ def print_shapes(*arrays):
         print(a.shape)
 
 
-__all__ = ['desc', 'dist_stats', 'first_look', 'na_part', 'print_shapes']
+__all__ = ['describe', 'dist_stats', 'first_look', 'na_part', 'print_shapes']
