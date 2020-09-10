@@ -2,6 +2,7 @@ import numpy as np
 import seaborn as sns
 import pandas as pd
 from IPython.display import display
+from .image import Image
 
 
 def na_part(data, verbose=False):
@@ -66,4 +67,14 @@ def print_shapes(*arrays):
         print(a.shape)
 
 
-__all__ = ['describe', 'dist_stats', 'first_look', 'na_part', 'print_shapes']
+def plot_dist_classic(df, columns, dp_kws={}, bp_kws={}):
+    """Рисует гистограммы и ящики с усами для каждого столбца датафрейма из списка."""
+    for col in columns:
+        with Image(st=f'Распределение признака "{col}"'):
+            Image.subplot('211')
+            sns.distplot(df[col], **dp_kws)
+            Image.subplot('212')
+            sns.boxplot(df[col], color='orange', **bp_kws)
+
+
+__all__ = ['describe', 'dist_stats', 'first_look', 'na_part', 'plot_dist_classic', 'print_shapes']
