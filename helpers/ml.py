@@ -81,13 +81,10 @@ def gradient(func, x, delta=.00000001):
     return (func(x + delta) - func(x)) / delta
 
 
-derivative = gradient
-
-
 def reshape_1d(series):
     """Принимает на вход Series и возвращает список одномерных векторов."""
     return np.reshape(series.values, (-1, 1))
 
 
-__all__ = ['batch_train_cv', 'derivative', 'gradient', 'proba_thresholds', 'reshape_1d', 'smape', 'train_model_cv',
+__all__ = ['batch_train_cv', 'gradient', 'proba_thresholds', 'reshape_1d', 'smape', 'train_model_cv',
            'train_val_test', 'xy_split']
