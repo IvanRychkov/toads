@@ -27,22 +27,29 @@ def fill_from(row, by, what, source):
 
 
 def ci_strip(data, ci=0.95, subset: 'list[str]' = None):
-    """Принимает набор данных и возвращает значения, лежащие в доверительном интервале.
+    """Strips dataframe, leaving values inside of confidence interval.
 
     data: {pd.DataFrame, array-like}
-    subset: [str] = список столбцов, по которым идёт отсечка."""
-    # Если датафрейм
+    subset: [str] = columns to consider while removing out-of-CI values."""
+
+    # Set quantiles
+    lower = (1 - ci) / 2
+    upper = 1 - lower
+
+    def ci_index(array):
+        """Return bool array with values inside CI"""
+        return (np.quantile(array, lower) <= array) & (array <= np.quantile(array, upper))
+
     if isinstance(data, pd.DataFrame):
-        df = data.copy()
-        columns = subset if subset else df.columns
-        for col in columns:  # Для каждого столбца
-            df = df.loc[ci_strip(df[col], ci=ci).index]  # Оставить индексы в доверительном интервале
-        return df
+        # All rows in subset must be in CI to stay
+        normal_index = np.all(                                     # Only all-True will remain True
+            [ci_index(data[column])                                # Get in-CI indexes
+             for column in (subset if subset else data.columns)],  # From each column
+            axis=0
+        )
+        return data[normal_index]
     else:
-        lower = (1 - ci) / 2
-        upper = 1 - lower
-        return data[(np.quantile(data, lower) <= data) &
-                    (data <= np.quantile(data, upper))]
+        return data[ci_index(data)]
 
 
 __all__ = ['ci_strip', 'fill_from', 'agg_fill_by_cat']
