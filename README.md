@@ -1,4 +1,2 @@
-# ds_helpers
-Helpers for Data Science projects.
-
-Mostly contains Matplotlib wrappers for convenient use.
+# Toads 🐸 - "TO Assist in Data Science"
+Classes and functions written to help with Data Science workflow in different ways.
