@@ -1,6 +1,6 @@
 from scipy.stats import mannwhitneyu
 
-from helpers.image import Image
+from .image import Image
 import seaborn as sns
 import matplotlib.pyplot as plt
 
