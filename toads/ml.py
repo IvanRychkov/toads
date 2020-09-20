@@ -68,12 +68,12 @@ def train_model_cv(model, x, y, scorer, features=None, cv=5, **cv_kws):
     return np.abs(np.mean(cross_val_score(model, x[features], y, cv=cv, scoring=scorer, **cv_kws)))
 
 
-def batch_train_cv(models, train_func: train_model_cv, names=None, greater_is_better=False, **train_kws):
-    """Обучает модели из списка, собирает результаты в Series."""
-    scores = []
-    for model in models:
-        scores.append(train_func(model, **train_kws))
-    return pd.Series(scores, index=models if names is None else names, name='score').sort_values(ascending=not greater_is_better)
+def batch_train_cv(model_grid: dict, cv_func: train_model_cv, greater_is_better=False, **train_kws):
+    """Собирает результаты кросс-валидации набора моделей в Series."""
+    scores = {name: cv_func(model, **train_kws)
+              for name, model in model_grid.items()}
+    # Запишем результат кросс-валидации каждой модели в словарь
+    return pd.Series(scores, name='score').sort_values(ascending=not greater_is_better)
 
 
 def gradient(func, x, delta=.00000001):
