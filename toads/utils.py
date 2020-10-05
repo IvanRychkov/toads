@@ -12,4 +12,9 @@ def dict_agg(d, agg_func=np.mean):
             for k, v in d.items()}
 
 
-__all__ = ['dict_agg', 'float_equal']
+def printif(*args, condition=True, **kws):
+    if condition:
+        print(*args, **kws)
+
+
+__all__ = ['dict_agg', 'float_equal', 'printif']
