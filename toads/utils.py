@@ -3,6 +3,7 @@ from collections.abc import Iterable
 
 
 def float_equal(a, b, threshold=1e-6):
+    """Проверяет равенство двух float-значений."""
     return np.abs(a - b) < threshold
 
 
@@ -13,6 +14,8 @@ def dict_agg(d, agg_func=np.mean):
 
 
 def printif(*args, condition=True, **kws):
+    """Печатает при условии condition.
+    Полезно в связке с параметров verbose."""
     if condition:
         print(*args, **kws)
 
