@@ -2,14 +2,12 @@ import numpy as np
 import pandas as pd
 
 
-def agg_fill_by_cat(df, target_column, cat_column, aggfunc='median'):
-    """Заполнение результатом aggfunc по категории (таблица, столбец с пустыми значениями, столбец с категориями)"""
-    # Для каждой категории, где есть пустые значения в целевом столбце:
-    for cat in df[df[target_column].isna()][cat_column].unique():
-        # Заполняем в целевом столбце пропуски медианой, соответствующей этой категории
-        df.loc[df.loc[:, cat_column] == cat, target_column] = \
-            df.loc[df.loc[:, cat_column] == cat, target_column].fillna(
-                df.loc[df.loc[:, cat_column] == cat, target_column].agg(aggfunc))
+def categorize_dict(text, cat_dict):
+    """Присваивает категории в соответствии со словарём, если в тексте содержится ключ."""
+    for key, value in cat_dict.items():
+        if key in text:
+            return value
+    return text
 
 
 def fill_from(row, by, what, source):
