@@ -2,50 +2,56 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
 
-class Image:
+class Img:
     """Даёт доступ к функциям для удобной отрисовки, поддерживает конструкцию with...as.
     -----
     **showparams: st=None, grid=False, legend=None, tight=False
     """
 
-    def __init__(self, x=15, y=4, **showparams):
+    def __init__(self, st=None, x=15, y=4, **showparams):
         self.x = x
         self.y = y
+        self.st = st
         self.showparams = showparams
 
     def __enter__(self):
-        self.figure(self.x, self.y)
+        self.figure()
         return self
 
     def __exit__(self, type, value, traceback):
         self.show(**self.showparams)
 
-    def figure(self, x=15, y=4):
+    def figure(self):
         """Инициализирует рисунок в приятном для глаза разрешении
         и оптимальном размере, который можно задать при необходимости
         """
-        plt.figure(figsize=(x, y), dpi=200)
+        plt.figure(figsize=(self.x, self.y), dpi=200)
 
-    def show(self, st=None, grid=False, legend=None, tight=False):
+    def show(self, grid=False, legend=None, tight=False):
         """Поможет в одну строчку воспользоваться частыми функциями pyplot
         """
         if len(plt.gcf().axes) != 0:
-            if tight: plt.tight_layout(pad=2.5)
-            if st: plt.suptitle(st)
-            if grid: plt.grid()
-            if legend == 'a': plt.legend()
-            if legend == 'f': plt.figlegend()
+            if tight:
+                plt.tight_layout(pad=2.5)
+            if self.st:
+                plt.suptitle(self.st)
+            if grid:
+                plt.grid()
+            if legend == 'a':
+                plt.legend()
+            if legend == 'f':
+                plt.figlegend()
             plt.show()
         plt.close()
 
     @staticmethod
-    def subplot(pos, title=None, sx=True):
+    def subplot(rows, cols, pos, title=None, sx=True):
         """Функция, которая добавляет на рисунок координатную плоскость с sharex по умолчанию
         """
         if sx:
-            plt.subplot(pos, sharex=plt.gca(), title=title)
+            plt.subplot(rows, cols, pos, sharex=plt.gca(), title=title)
         else:
-            plt.subplot(pos, title=title)
+            plt.subplot(rows, cols, pos, title=title)
 
     @staticmethod
     def labels(x=None, y=None, x_kws=None, y_kws=None):
@@ -67,4 +73,4 @@ class Image:
             plt.gca().yaxis.set_major_formatter(formatter)
 
 
-__all__ = ['Image']
+__all__ = ['Img']
