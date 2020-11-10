@@ -15,8 +15,7 @@ class Img:
         self.showparams = showparams
 
     def __enter__(self):
-        self.figure()
-        return self
+        pass
 
     def __exit__(self, type, value, traceback):
         self.show(**self.showparams)
@@ -25,11 +24,14 @@ class Img:
         """Инициализирует рисунок в приятном для глаза разрешении
         и оптимальном размере, который можно задать при необходимости
         """
-        plt.figure(figsize=(self.x, self.y), dpi=200)
+        plt.gcf().set_size_inches(self.x, self.y)
+        plt.gcf().set_dpi(200)
 
     def show(self, grid=False, legend=None, tight=False):
         """Поможет в одну строчку воспользоваться частыми функциями pyplot
         """
+        self.figure()
+
         if len(plt.gcf().axes) != 0:
             if tight:
                 plt.tight_layout(pad=2.5)
@@ -42,7 +44,7 @@ class Img:
             if legend == 'f':
                 plt.figlegend()
             plt.show()
-        plt.close()
+        plt.close('all')
 
     @staticmethod
     def subplot(rows, cols, pos, title=None, sx=True):
