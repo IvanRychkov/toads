@@ -44,7 +44,7 @@ class Img:
 
         if len(plt.gcf().axes) != 0:
             if (self.ts_data is not None) and self.ts_n_ticks:
-                Img.time_series_format(self.ts_data, self.ts_n_ticks, self.ts_autofmt_date)
+                Img.time_series_format(self.ts_data, self.ts_n_ticks, self.ts_autofmt_x)
             if self.tight:
                 plt.tight_layout(pad=2.5)
             if self.st:
