@@ -12,7 +12,7 @@ class Img:
 
     def __init__(self, st=None, x=15, y=4,
                  grid=False, tight=False, legend=False,
-                 ts_data_col=None, ts_n_ticks=20, ts_autofmt_date=True):
+                 ts_data_col=None, ts_n_ticks=20, ts_autofmt_x=True):
         self.x = x
         self.y = y
         self.st = st
@@ -21,7 +21,7 @@ class Img:
         self.legend = legend
         self.ts_data = ts_data_col
         self.ts_n_ticks = ts_n_ticks
-        self.ts_autofmt_date = ts_autofmt_date
+        self.ts_autofmt_x = ts_autofmt_x
 
     def __enter__(self):
         pass
