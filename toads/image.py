@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
+import numpy as np
+import pandas as pd
 
 
 class Img:
@@ -73,6 +75,21 @@ class Img:
             plt.gca().xaxis.set_major_formatter(formatter)
         if axis in [1, 'y']:
             plt.gca().yaxis.set_major_formatter(formatter)
+
+    @staticmethod
+    def time_series_format(target_col, n_ticks, execute=True, autofmt_x=True):
+        """Formats x-axis to fit time series data without breaking it. Uses index as datetime column."""
+        # Получаем тики на равном расстоянии
+        ticks = np.linspace(0, target_col.shape[0] - 1, n_ticks).round().astype(int)
+        # Берём названия дат из индекса
+        labels = target_col[ticks] if isinstance(target_col, pd.DatetimeIndex)\
+            else target_col.index[ticks]
+        # По умолчанию функция сразу форматирует тики
+        if execute:
+            plt.xticks(ticks, labels)
+        if autofmt_x:
+            plt.gcf().autofmt_xdate()
+        return ticks, labels
 
 
 __all__ = ['Img']
