@@ -22,6 +22,7 @@ class Img:
         self.ts_data = ts_data_col
         self.ts_n_ticks = ts_n_ticks
         self.ts_autofmt_x = ts_autofmt_x
+        self.tsx = range(self.ts_data.shape[0])
 
     def __enter__(self):
         pass
