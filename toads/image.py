@@ -25,7 +25,7 @@ class Img:
         self.tsx = range(self.ts_data.shape[0])
 
     def __enter__(self):
-        pass
+        return self
 
     def __exit__(self, type, value, traceback):
         self.show()
