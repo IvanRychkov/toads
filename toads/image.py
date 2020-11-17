@@ -97,8 +97,8 @@ class Img:
         # По умолчанию функция сразу форматирует тики
         if execute:
             plt.xticks(ticks, labels)
-        if autofmt_x:
-            plt.gcf().autofmt_xdate()
+            if autofmt_x:
+                plt.gcf().autofmt_xdate()
         return ticks, labels
 
 
