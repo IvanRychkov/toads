@@ -10,40 +10,50 @@ class Img:
     **showparams: st=None, grid=False, legend=None, tight=False
     """
 
-    def __init__(self, st=None, x=15, y=4, **showparams):
+    def __init__(self, st=None, x=15, y=4,
+                 grid=False, tight=False, legend=False,
+                 ts_data_col=None, ts_n_ticks=20, ts_autofmt_date=True):
         self.x = x
         self.y = y
         self.st = st
-        self.showparams = showparams
+        self.grid = grid
+        self.tight = tight
+        self.legend = legend
+        self.ts_data = ts_data_col
+        self.ts_n_ticks = ts_n_ticks
+        self.ts_autofmt_date = ts_autofmt_date
 
     def __enter__(self):
         pass
 
     def __exit__(self, type, value, traceback):
-        self.show(**self.showparams)
+        self.show()
 
-    def figure(self):
+    @staticmethod
+    def figure(x, y):
         """Инициализирует рисунок в приятном для глаза разрешении
         и оптимальном размере, который можно задать при необходимости
         """
-        plt.gcf().set_size_inches(self.x, self.y)
+        plt.gcf().set_size_inches(x, y)
         plt.gcf().set_dpi(200)
 
-    def show(self, grid=False, legend=None, tight=False):
+    def show(self):
         """Поможет в одну строчку воспользоваться частыми функциями pyplot
         """
-        self.figure()
+        self.figure(self.x, self.y)
 
         if len(plt.gcf().axes) != 0:
-            if tight:
+            if self.ts_data & self.ts_n_ticks:
+                Img.time_series_format(self.ts_data, self.ts_n_ticks, self.ts_autofmt_date)
+            if self.tight:
                 plt.tight_layout(pad=2.5)
             if self.st:
                 plt.suptitle(self.st)
-            if grid:
+            if self.grid:
                 plt.grid()
-            if legend == 'a':
+            if self.legend == 'a':
                 plt.legend()
-            if legend == 'f':
+            if self.legend == 'f':
                 plt.figlegend()
             plt.show()
         plt.close('all')
@@ -77,13 +87,13 @@ class Img:
             plt.gca().yaxis.set_major_formatter(formatter)
 
     @staticmethod
-    def time_series_format(target_col, n_ticks, execute=True, autofmt_x=True):
+    def time_series_format(date_col, n_ticks, execute=True, autofmt_x=True):
         """Formats x-axis to fit time series data without breaking it. Uses index as datetime column."""
         # Получаем тики на равном расстоянии
-        ticks = np.linspace(0, target_col.shape[0] - 1, n_ticks).round().astype(int)
+        ticks = np.linspace(0, date_col.shape[0] - 1, n_ticks).round().astype(int)
         # Берём названия дат из индекса
-        labels = target_col[ticks] if isinstance(target_col, pd.DatetimeIndex)\
-            else target_col.index[ticks]
+        labels = date_col[ticks] if isinstance(date_col, pd.DatetimeIndex)\
+            else date_col.index[ticks]
         # По умолчанию функция сразу форматирует тики
         if execute:
             plt.xticks(ticks, labels)
