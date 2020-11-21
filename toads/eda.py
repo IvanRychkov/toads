@@ -6,6 +6,9 @@ from .image import Img
 import matplotlib.pyplot as plt
 
 
+plt.ioff()
+
+
 def na_part(data, verbose=False):
     """Агрегирует долю пропусков в объектах pandas.
 
@@ -87,9 +90,10 @@ def plot_time_series(data, n_ticks=15, plot_func=sns.lineplot, format_axis=True,
         labels = data.index[ticks]
         plt.xticks(ticks, labels)
         plt.gcf().autofmt_xdate()
-    return plot_func(data=data.reset_index(),
+    ax = plot_func(data=data.reset_index(),
                      legend=False,
                      **plot_kws)
+    return ax
 
 
 __all__ = ['describe', 'dist_stats', 'first_look', 'na_part',
