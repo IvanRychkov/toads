@@ -80,14 +80,16 @@ def plot_dist_classic(df, columns, dp_kws={}, bp_kws={}):
 
 def plot_time_series(data, n_ticks=15, plot_func=sns.lineplot, format_axis=True, **plot_kws):
     if not isinstance(data.index, pd.DatetimeIndex):
-        raise Exception('Data index must be of type: "pandas.DateTimeIndex".')
+        raise TypeError('data.index must be instance of "pandas.DateTimeIndex".')
     if format_axis:
         ticks = np.linspace(0, data.shape[0] - 1, n_ticks).round().astype(int)
         # Берём названия дат из индекса
         labels = data.index[ticks]
         plt.xticks(ticks, labels)
         plt.gcf().autofmt_xdate()
-    return plot_func(data=data.reset_index(), **plot_kws)
+    return plot_func(data=data.reset_index(),
+                     legend=False,
+                     **plot_kws)
 
 
 __all__ = ['describe', 'dist_stats', 'first_look', 'na_part',
