@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
-import numpy as np
-import pandas as pd
 
 
 class Img:
@@ -19,11 +17,6 @@ class Img:
         self.grid = grid
         self.tight = tight
         self.legend = legend
-        self.ts_data = ts_data_col
-        self.ts_n_ticks = ts_n_ticks
-        self.ts_autofmt_x = ts_autofmt_x
-        if self.ts_data is not None:
-            self.tsx = range(self.ts_data.shape[0])
 
     def __enter__(self):
         return self
@@ -45,10 +38,6 @@ class Img:
         self.figure(self.x, self.y)
 
         if len(plt.gcf().axes) != 0:
-            if (self.ts_data is not None) and self.ts_n_ticks:
-                Img.time_series_format(date_col=self.ts_data,
-                                       n_ticks=self.ts_n_ticks,
-                                       autofmt_x=self.ts_autofmt_x)
             if self.tight:
                 plt.tight_layout(pad=2.5)
             if self.st:
@@ -89,21 +78,6 @@ class Img:
             plt.gca().xaxis.set_major_formatter(formatter)
         if axis in [1, 'y']:
             plt.gca().yaxis.set_major_formatter(formatter)
-
-    @staticmethod
-    def time_series_format(date_col, n_ticks, execute=True, autofmt_x=True):
-        """Formats x-axis to fit time series data without breaking it. Uses index as datetime column."""
-        # Получаем тики на равном расстоянии
-        ticks = np.linspace(0, date_col.shape[0] - 1, n_ticks).round().astype(int)
-        # Берём названия дат из индекса
-        labels = date_col[ticks] if isinstance(date_col, pd.DatetimeIndex)\
-            else date_col.index[ticks]
-        # По умолчанию функция сразу форматирует тики
-        if execute:
-            plt.xticks(ticks, labels)
-            if autofmt_x:
-                plt.gcf().autofmt_xdate()
-        return ticks, labels
 
 
 __all__ = ['Img']
