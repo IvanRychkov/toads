@@ -88,12 +88,17 @@ def plot_time_series(data, n_ticks=15, plot_func=sns.lineplot, format_axis=True,
         plt.xticks(ticks, labels)
         plt.gcf().autofmt_xdate()
 
-    plot_data = data.reset_index()
-    ax = plot_func(data=plot_data,
-                   x=plot_data.index,
-                   legend=False,
-                   **plot_kws)
-    return ax
+    plot_data = data.reset_index(drop=True)
+    plot_data.index.rename('datetime', inplace=True)
+
+    if isinstance(plot_data, pd.Series):
+        return plot_func(x=plot_data.index,
+                         y=plot_data,
+                         legend=False,
+                         **plot_kws)
+    return plot_func(data=plot_data,
+                     legend='auto',
+                     **plot_kws)
 
 
 __all__ = ['describe', 'dist_stats', 'first_look', 'na_part',
