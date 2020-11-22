@@ -82,6 +82,9 @@ def plot_time_series(data, n_ticks=15, plot_func=sns.lineplot, format_axis=True,
     if not isinstance(data.index, pd.DatetimeIndex):
         raise TypeError('data.index must be instance of "pandas.DateTimeIndex".')
     if format_axis:
+        # Если мало тиков, то тиков мало
+        if n_ticks > data.shape[0]:
+            n_ticks = data.shape[0]
         ticks = np.linspace(0, data.shape[0] - 1, n_ticks).round().astype(int)
         # Берём названия дат из индекса
         labels = data.index[ticks]
