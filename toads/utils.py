@@ -31,4 +31,15 @@ def printif(*args, condition=True, **kws):
         print(*args, **kws)
 
 
-__all__ = ['between', 'dict_agg', 'float_equal', 'overlaps_with', 'printif']
+def snake_case(s: str):
+    """Converts camelCase string to snake_case style."""
+    l = len(s)
+    return ''.join('_' + c.lower()
+                   if all([i != 0,
+                           c.isupper(),
+                           s[i - 1].islower()])
+                   else c.lower()
+                   for i, c in enumerate(s))
+
+
+__all__ = ['between', 'dict_agg', 'float_equal', 'overlaps_with', 'printif', 'snake_case']
