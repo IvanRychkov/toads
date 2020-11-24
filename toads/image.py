@@ -4,8 +4,6 @@ from matplotlib.ticker import PercentFormatter
 
 class Img:
     """Даёт доступ к функциям для удобной отрисовки, поддерживает конструкцию with...as.
-    -----
-    **showparams: st=None, grid=False, legend=None, tight=False
     """
 
     def __init__(self, st=None, x=15, y=4,
