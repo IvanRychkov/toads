@@ -9,8 +9,7 @@ class Img:
     """
 
     def __init__(self, st=None, x=15, y=4,
-                 grid=False, tight=False, legend=False,
-                 ts_data_col=None, ts_n_ticks=20, ts_autofmt_x=True):
+                 grid=False, tight=False, legend=False):
         self.x = x
         self.y = y
         self.st = st
