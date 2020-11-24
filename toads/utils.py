@@ -4,7 +4,7 @@ from collections.abc import Iterable
 
 def between(x, interval=(0, 1)):
     """Возвращает True, если x находится в интервале."""
-    return left_right[0] <= x <= left_right[1]
+    return interval[0] <= x <= interval[1]
 
 
 def float_equal(a, b, threshold=1e-6):
@@ -31,9 +31,8 @@ def printif(*args, condition=True, **kws):
         print(*args, **kws)
 
 
-def snake_case(s: str):
-    """Converts camelCase string to snake_case style."""
-    l = len(s)
+def snake_case(s):
+    """Преобразование строк из camelCase в snake_case."""
     return ''.join('_' + c.lower()
                    if all([i != 0,
                            c.isupper(),
