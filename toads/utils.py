@@ -26,7 +26,7 @@ def overlaps_with(subset, superset):
 
 def printif(*args, condition=True, **kws):
     """Печатает при условии condition.
-    Полезно в связке с параметров verbose."""
+    Полезно в связке с параметром verbose."""
     if condition:
         print(*args, **kws)
 
