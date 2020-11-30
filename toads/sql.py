@@ -21,5 +21,9 @@ class SQLocal:
                      if_exists=if_exists,
                      **kws)
 
+    def list_tables(self):
+        """Перечисляет все таблицы в базе."""
+        return [t[0] for t in self.con.execute('select name from sqlite_master').fetchall()]
+
 
 __all__ = ['SQLocal']
