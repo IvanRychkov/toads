@@ -3,6 +3,8 @@ from scipy.stats import mannwhitneyu
 from .image import Img
 import seaborn as sns
 import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
 
 
 def hypo(test, alpha=0.05, oneside=False, verbose=True):
@@ -29,6 +31,12 @@ def hypo(test, alpha=0.05, oneside=False, verbose=True):
         return result
 
 
+def ecdf(data):
+    """Compute ECDF for a one-dimensional array of measurements."""
+    return pd.Series(np.arange(1, data.shape[0] + 1) / data.shape[0],
+                     index=np.sort(data))
+
+
 def dist_compare(true, preds, hypothesis=True, image='dist', **img_kws):
     """Рисует распределения ответов модели и реальных значений целевого признака.
     Проверяет сходство выборок критерием Манна-Уитни."""
@@ -44,4 +52,4 @@ def dist_compare(true, preds, hypothesis=True, image='dist', **img_kws):
         hypo(mannwhitneyu(true, preds))
 
 
-__all__ = ['dist_compare', 'hypo']
+__all__ = ['dist_compare', 'ecdf', 'hypo']
