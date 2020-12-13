@@ -10,9 +10,12 @@ class SQLocal:
 
     def __call__(self, query: str, **kws) -> pd.DataFrame:
         """Работает с SELECT."""
-        return pd.read_sql_query(sql=query,
-                                 con=self.con,
-                                 **kws)
+        try:
+            return pd.read_sql_query(sql=query,
+                                     con=self.con,
+                                     **kws)
+        except TypeError:
+            return None
 
     def register_table(self, name, table, if_exists='replace', **kws):
         """Добавляет таблицу в базу данных. По умолчанию заменяет существующую таблицу."""
