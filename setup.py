@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="toads-ivanrychkov",
-    version="0.0.13",
+    version="0.0.14",
     author="Ivan Rychkov",
     author_email="rychyrych@yandex.ru",
     description="Data Science tools from preprocessing and visualization to statistics and ML.",

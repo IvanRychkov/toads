@@ -1,10 +1,22 @@
 import numpy as np
 from collections.abc import Iterable
-
+from functools import wraps
 
 def between(x, interval=(0, 1)):
     """Возвращает True, если x находится в интервале."""
     return interval[0] <= x <= interval[1]
+
+
+def conditional(condition=True):
+    """Calls function in condition is True."""
+    def upper(func):
+        @wraps(func)
+        def wrapper(*args, **kws):
+            if condition:
+                return func(*args, **kws)
+            pass
+        return wrapper
+    return upper
 
 
 def float_equal(a, b, threshold=1e-6):
