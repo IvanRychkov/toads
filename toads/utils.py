@@ -53,4 +53,4 @@ def snake_case(s):
                    for i, c in enumerate(s))
 
 
-__all__ = ['between', 'dict_agg', 'float_equal', 'overlaps_with', 'printif', 'snake_case']
+__all__ = ['between', 'conditional', 'dict_agg', 'float_equal', 'overlaps_with', 'printif', 'snake_case']
