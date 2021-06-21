@@ -10,7 +10,7 @@ class Img:
 
     def __init__(self, st=None, x=15, y=4,
                  grid=False, tight=False, legend=False,
-                 dpi=200, save_only=False, **save_kws):
+                 dpi=200, save_only=False, name='img.png', **save_kws):
         self.x = x
         self.y = y
         self.st = st
@@ -20,6 +20,7 @@ class Img:
         self.save_kws = save_kws
         self.dpi = dpi
         self.save_only = save_only
+        self.name = name
 
     def __enter__(self):
         return self
@@ -36,7 +37,7 @@ class Img:
         plt.gcf().set_size_inches(x, y)
         plt.gcf().set_dpi(dpi)
 
-    def show(self, no_show=False):
+    def show(self, silent=False):
         """Поможет в одну строчку воспользоваться частыми функциями pyplot
         """
         self.figure(self.x, self.y, self.dpi)
@@ -58,9 +59,9 @@ class Img:
                 if not self.save_kws['fname']:
                     target_folder = 'tmp/plots'
                     os.makedirs(target_folder, exist_ok=True)
-                    self.save_kws['fname'] = os.path.join(target_folder, 'img.png')
+                    self.save_kws['fname'] = os.path.join(target_folder, self.name)
                 plt.savefig(**self.save_kws)
-            if not no_show:
+            if not silent:
                 plt.show()
         plt.close('all')
 
