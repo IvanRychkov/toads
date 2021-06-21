@@ -1,3 +1,5 @@
+import os.path
+
 import matplotlib.pyplot as plt
 from matplotlib.ticker import PercentFormatter
 
@@ -54,8 +56,9 @@ class Img:
             if self.save_kws:
                 # Если нет имени, то в корень
                 if not self.save_kws['fname']:
-                    self.save_kws['fname'] = './tmp/images/img.png'
-                    self.save_kws['dpi'] = self.dpi
+                    target_folder = 'tmp/plots'
+                    os.makedirs(target_folder, exist_ok=True)
+                    self.save_kws['fname'] = os.path.join(target_folder, 'img.png')
                 plt.savefig(**self.save_kws)
             if not no_show:
                 plt.show()
