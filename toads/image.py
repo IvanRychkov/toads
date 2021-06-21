@@ -8,7 +8,7 @@ class Img:
 
     def __init__(self, st=None, x=15, y=4,
                  grid=False, tight=False, legend=False,
-                 dpi=200, **save_kws):
+                 dpi=200, save_only=False, **save_kws):
         self.x = x
         self.y = y
         self.st = st
@@ -17,12 +17,14 @@ class Img:
         self.legend = legend
         self.save_kws = save_kws
         self.dpi = dpi
+        self.save_only = save_only
 
     def __enter__(self):
         return self
 
     def __exit__(self, type, value, traceback):
-        self.show()
+        if not self.save_only:
+            self.show()
 
     @staticmethod
     def figure(x, y, dpi=200):
@@ -32,7 +34,7 @@ class Img:
         plt.gcf().set_size_inches(x, y)
         plt.gcf().set_dpi(dpi)
 
-    def show(self):
+    def show(self, no_show=False):
         """Поможет в одну строчку воспользоваться частыми функциями pyplot
         """
         self.figure(self.x, self.y, self.dpi)
@@ -55,8 +57,8 @@ class Img:
                     self.save_kws['fname'] = './tmp/images/img.png'
                     self.save_kws['dpi'] = self.dpi
                 plt.savefig(**self.save_kws)
-
-            plt.show()
+            if not no_show:
+                plt.show()
         plt.close('all')
 
     @staticmethod
