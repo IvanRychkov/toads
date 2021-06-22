@@ -1,3 +1,4 @@
+import functools
 import os.path
 
 import matplotlib.pyplot as plt
@@ -34,8 +35,8 @@ class Img:
         plt.gcf().set_size_inches(x, y)
         plt.gcf().set_dpi(dpi)
 
+    @functools.wraps(plt.savefig)
     def savefig(self, **kws):
-        '''Best called before show().'''
         plt.savefig(**kws)
 
     def show(self):
