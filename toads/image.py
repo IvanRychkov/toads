@@ -36,8 +36,11 @@ class Img:
         plt.gcf().set_dpi(dpi)
 
     @functools.wraps(plt.savefig)
-    def savefig(self, **kws):
-        plt.savefig(**kws)
+    def savefig(self, fname, **kws):
+        """Best called before show()."""
+        if 'dpi' not in kws:
+            kws['dpi'] = 'figure'
+        plt.savefig(fname, **kws)
 
     def show(self):
         """Поможет в одну строчку воспользоваться частыми функциями pyplot
