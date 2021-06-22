@@ -10,34 +10,35 @@ class Img:
 
     def __init__(self, st=None, x=15, y=4,
                  grid=False, tight=False, legend=False,
-                 dpi=200, save_only=False, name='img.png', **save_kws):
+                 dpi=200, no_show=False):
         self.x = x
         self.y = y
         self.st = st
         self.grid = grid
         self.tight = tight
         self.legend = legend
-        self.save_kws = save_kws
         self.dpi = dpi
-        self.save_only = save_only
-        self.name = name
+        self.no_show = no_show
 
     def __enter__(self):
         return self
 
     def __exit__(self, type, value, traceback):
-        if not self.save_only:
-            self.show()
+        self.show()
 
     @staticmethod
-    def figure(x, y, dpi=200):
+    def figure(x, y, dpi):
         """Инициализирует рисунок в приятном для глаза разрешении
         и оптимальном размере, который можно задать при необходимости
         """
         plt.gcf().set_size_inches(x, y)
         plt.gcf().set_dpi(dpi)
 
-    def show(self, silent=False):
+    def savefig(self, **kws):
+        '''Best called before show().'''
+        plt.savefig(**kws)
+
+    def show(self):
         """Поможет в одну строчку воспользоваться частыми функциями pyplot
         """
         self.figure(self.x, self.y, self.dpi)
@@ -53,15 +54,7 @@ class Img:
                 plt.legend()
             if self.legend == 'f':
                 plt.figlegend()
-            # Сохраняем картинку
-            if self.save_kws:
-                # Если нет имени, то в корень
-                if not self.save_kws['fname']:
-                    target_folder = 'tmp/plots'
-                    os.makedirs(target_folder, exist_ok=True)
-                    self.save_kws['fname'] = os.path.join(target_folder, self.name)
-                plt.savefig(**self.save_kws)
-            if not silent:
+            if not self.no_show:
                 plt.show()
         plt.close('all')
 
