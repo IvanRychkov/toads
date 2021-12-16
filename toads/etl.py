@@ -1,4 +1,8 @@
-class BatchETL(object):
+from tqdm import tqdm
+from functools import wraps
+
+
+class ETL(object):
     """Class for building and executing ETL pipelines."""
 
     def __init__(self, extract=None, transform=None, load=None, batch_size=10000,
@@ -14,8 +18,9 @@ class BatchETL(object):
 
         pre_execute -> extract -> transform -> load -> post_execute
         """
-        self._extract = extract
-        self.callable_extract = callable(extract)
+        self._extract = None
+        self.callable_extract = None
+        self.extract(extract)
         self._transform = transform if transform else lambda x: x
         self._load = load if load else lambda x: None
         self.batch_size = batch_size
@@ -27,7 +32,8 @@ class BatchETL(object):
         """Executes ETL."""
         self.execute()
 
-    def execute(self):
+    def execute(self, extract=None):
+        """Executes ETL."""
         def batch_iter(iterable):
             """Yields data in batches of arbitrary size."""
             buffer = []
@@ -42,6 +48,9 @@ class BatchETL(object):
             # If anything left in buffer
             if buffer:
                 yield buffer
+
+        if extract:
+            self.extract(extract)
 
         extracted = self._extract() if self.callable_extract and not isinstance(self._extract, type) else self._extract
         try:
@@ -64,8 +73,9 @@ class BatchETL(object):
             return self._post_execute()
 
     def extract(self, func):
-        """Decorator for extract function."""
+        """Decorator for extractor function. Assigns argument 'func' as 'extract' step in pipeline."""
         self._extract = func
+        self.callable_extract = callable(self._extract)
         return func
 
     def transform(self, func):
