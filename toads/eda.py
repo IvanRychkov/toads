@@ -1,7 +1,6 @@
 import numpy as np
 import seaborn as sns
 import pandas as pd
-from IPython.display import display
 from .image import Img
 import matplotlib.pyplot as plt
 
@@ -40,27 +39,6 @@ def dist_stats(column):
         'var': np.var(column),
         'std': np.sqrt(np.var(column)),
     }
-
-
-def first_look(df: pd.DataFrame(), scatter_matrix=True) -> None:
-    """Выводит наиболее популярные сведения о датафрейме."""
-    df.info()
-    print('-' * 50)
-    print('head()')
-    display(df.head(3))
-    print('-' * 50)
-    print('nunique()')
-    display(df.nunique())
-    print('-' * 50)
-    print('describe()')
-    display(describe(df))
-    print('-' * 50)
-    print('corr()')
-    display(df.corr())
-    if scatter_matrix:
-        sns.pairplot(df)
-    print()
-
 
 def print_shapes(*arrays):
     """Принимает список массивов и печатает их размеры."""
