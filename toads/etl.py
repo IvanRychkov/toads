@@ -41,7 +41,7 @@ class ETL(object):
                 buffer.append(v)
 
                 # If batch size reached
-                if i % self.batch_size == 0 and i != 0:
+                if i % self.batch_size == 1:
                     yield buffer
                     buffer = []
 
