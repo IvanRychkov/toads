@@ -51,7 +51,7 @@ class ETL(object):
         if self._count_func:
             extracted = tqdm(extracted, total=self._count_func())
 
-        for batch in batch_iter(extracted):
+        for batch in batch_iter(extracted, batch_size=self.batch_size):
             self._load([*map(self._transform, batch)])
 
         if self._post_execute:
@@ -84,14 +84,14 @@ class ETL(object):
         return func
 
 
-def batch_iter(iterable):
+def batch_iter(iterable, batch_size=10000):
     """Yields data in batches of arbitrary size."""
     buffer = []
     for i, v in enumerate(iterable, start=1):
         buffer.append(v)
 
         # If batch size reached
-        if i % self.batch_size == 1:
+        if i % batch_size == 1:
             yield buffer
             buffer = []
 
