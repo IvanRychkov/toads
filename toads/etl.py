@@ -34,21 +34,6 @@ class ETL(object):
 
     def execute(self, extract=None):
         """Executes ETL."""
-        def batch_iter(iterable):
-            """Yields data in batches of arbitrary size."""
-            buffer = []
-            for i, v in enumerate(iterable, start=1):
-                buffer.append(v)
-
-                # If batch size reached
-                if i % self.batch_size == 1:
-                    yield buffer
-                    buffer = []
-
-            # If anything left in buffer
-            if buffer:
-                yield buffer
-
         if extract:
             self.extract(extract)
 
@@ -97,3 +82,22 @@ class ETL(object):
         """Decorator for post_execute function."""
         self._post_execute = func
         return func
+
+
+def batch_iter(iterable):
+    """Yields data in batches of arbitrary size."""
+    buffer = []
+    for i, v in enumerate(iterable, start=1):
+        buffer.append(v)
+
+        # If batch size reached
+        if i % self.batch_size == 1:
+            yield buffer
+            buffer = []
+
+    # If anything left in buffer
+    if buffer:
+        yield buffer
+
+
+__all__ = ['ETL', 'batch_iter']
