@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="toads-ivanrychkov",
-    version="0.0.23",
+    version="0.0.24",
     author="Ivan Rychkov",
     author_email="rychyrych@yandex.ru",
     description="Data Science tools from preprocessing and visualization to statistics and ML.",
@@ -18,7 +18,8 @@ setuptools.setup(
         'scikit-learn',
         'numpy',
         'pandas',
-        'tqdm'
+        'tqdm',
+        'redis'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
