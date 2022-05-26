@@ -1,5 +1,6 @@
 from tqdm import tqdm
-from functools import wraps
+from pydantic import BaseModel, ValidationError
+from typing import Callable, Type, Iterable, List
 
 
 class ETL(object):
@@ -100,4 +101,75 @@ def batch_iter(iterable, batch_size=10000):
         yield buffer
 
 
-__all__ = ['ETL', 'batch_iter']
+def execute_etl(extract_iterable: Iterable[dict],
+                transform_model: Type[BaseModel] = None,
+                load_func: Callable[[List[dict]], None] = None,
+                pre_execute: Callable = None,
+                post_execute: Callable = None,
+                load_batch_size: int = 10000,
+                skip_validation_errors: bool = True,
+                verbose: bool = True):
+    """Runs an ETL,
+    extracting data from any iterable,
+    transforming and validating each object with pydantic models,
+    putting it into batches for loading with user defined function."""
+    assert iter(extract_iterable), 'extract_iterable must be iterable'
+    assert issubclass(transform_model, BaseModel), 'transform_model must be subclass of pydantic.main.BaseModel'
+    assert callable(pre_execute), 'pre_execute must be callable'
+    assert callable(load_func), 'load_func must be callable'
+    assert callable(post_execute), 'post_execute must be callable'
+
+    def load_batch(batch: list):
+        if verbose:
+            print('loading...')
+        if len(batch) != 0:
+            load_func(batch)
+
+    def announce_batch(c: int):
+        """Выводит сообщение об обработке очередного батча."""
+        if verbose:
+            print(f'extracting and validating batch #{c}')
+
+    if pre_execute:
+        if verbose:
+            print('running pre-execute callback...')
+        pre_execute()
+
+    # Инициализируем переменные
+    batch = []
+    batch_counter = 0
+    validation_error_count = 0
+
+    # Запускаем ETL
+    announce_batch(batch_counter)
+    for i, e in enumerate(extract_iterable, start=1):
+        # Валидация данных и добавление в батч на загрузку
+        try:
+            batch.append(transform_model(**e).dict() if transform_model else e)
+        except ValidationError as e:
+            # Если ошибка валидации
+            if not skip_validation_errors:
+                raise e
+            validation_error_count += 1
+            continue
+
+        # Если достаточно данных, загружаем
+        if i % load_batch_size == 1:
+            load_batch(batch)
+            batch.clear()  # очищаем батч
+            assert len(batch) == 0, 'batch is not empty!'
+            batch_counter += 1
+            announce_batch(batch_counter)
+    # Загружаем оставшиеся данные
+    load_batch(batch)
+
+    if post_execute:
+        if verbose:
+            print('running pre-execute callback...')
+        post_execute()
+
+    if verbose:
+        print('done! invalid objects:', validation_error_count)
+
+
+__all__ = ['ETL', 'batch_iter', 'execute_etl']
