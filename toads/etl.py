@@ -107,7 +107,7 @@ def execute_etl(extract_iterable: Iterable[dict],
                 pre_execute: Callable = None,
                 post_execute: Callable = None,
                 load_batch_size: int = 10000,
-                skip_validation_errors: bool = True,
+                skip_validation_errors: bool = False,
                 verbose: bool = True):
     """Runs an ETL,
     extracting data from any iterable,
