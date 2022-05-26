@@ -114,10 +114,11 @@ def execute_etl(extract_iterable: Iterable[dict],
     transforming and validating each object with pydantic models,
     putting it into batches for loading with user defined function."""
     assert iter(extract_iterable), 'extract_iterable must be iterable'
-    assert issubclass(transform_model, BaseModel), 'transform_model must be subclass of pydantic.main.BaseModel'
-    assert callable(pre_execute), 'pre_execute must be callable'
+    assert issubclass(transform_model, BaseModel) or transform_model is None, 'transform_model must be subclass ' \
+                                                                              'of pydantic.main.BaseModel'
     assert callable(load_func), 'load_func must be callable'
-    assert callable(post_execute), 'post_execute must be callable'
+    assert callable(pre_execute) or not post_execute, 'pre_execute must be callable'
+    assert callable(post_execute) or not post_execute, 'post_execute must be callable'
 
     def load_batch(batch: list):
         if verbose:
