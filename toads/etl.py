@@ -140,6 +140,7 @@ def execute_etl(extract_iterable: Iterable[dict],
     batch = []
     batch_counter = 0
     validation_error_count = 0
+    next_load_at = load_batch_size  # Батч загружается на этой итерации
 
     # Запускаем ETL
     announce_batch(batch_counter)
@@ -155,11 +156,12 @@ def execute_etl(extract_iterable: Iterable[dict],
             continue
 
         # Если достаточно данных, загружаем
-        if i % load_batch_size == 1:
+        if i == next_load_at:
             load_batch(batch)
             batch.clear()  # очищаем батч
-            assert len(batch) == 0, 'batch is not empty!'
+            assert len(batch) == 0, 'fatal error: batch is not empty!'
             batch_counter += 1
+            next_load_at += load_batch_size  # Задаём следующую итерацию для загрузки
             announce_batch(batch_counter)
     # Загружаем оставшиеся данные
     load_batch(batch)
