@@ -19,7 +19,8 @@ setuptools.setup(
         'numpy',
         'pandas',
         'tqdm',
-        'redis'
+        'redis',
+        'pydantic'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
