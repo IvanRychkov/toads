@@ -120,11 +120,12 @@ def execute_etl(extract_iterable: Iterable[dict],
     assert callable(pre_execute) or not post_execute, 'pre_execute must be callable'
     assert callable(post_execute) or not post_execute, 'post_execute must be callable'
 
-    def load_batch(batch: list):
+    def load_batch(b: list):
+        """Загрузка батча при помощи функции load_func"""
         if verbose:
-            print('loading...')
-        if len(batch) != 0:
-            load_func(batch)
+            print(f'loading {len(b)} objects...')
+        if len(b) != 0:
+            load_func(b)
 
     def announce_batch(c: int):
         """Выводит сообщение об обработке очередного батча."""
