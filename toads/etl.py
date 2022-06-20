@@ -169,7 +169,7 @@ def execute_etl(extract_iterable: Iterable[dict],
 
     if post_execute:
         if verbose:
-            print('running pre-execute callback...')
+            print('running post-execute callback...')
         post_execute()
 
     if verbose:
