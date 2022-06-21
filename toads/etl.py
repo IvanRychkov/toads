@@ -165,7 +165,8 @@ def execute_etl(extract_iterable: Iterable[dict],
             next_load_at += load_batch_size  # Задаём следующую итерацию для загрузки
             announce_batch(batch_counter)
     # Загружаем оставшиеся данные
-    load_batch(batch)
+    if len(batch) > 0:
+        load_batch(batch)
 
     if post_execute:
         if verbose:
