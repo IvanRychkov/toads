@@ -30,4 +30,9 @@ def upsert_into_postgres_table(table: Table, db: Engine, index_elements: List[st
     return upsert_func
 
 
+def truncate_table(table: Table) -> None:
+    """Delete all rows from table."""
+    return table.delete().execute
+
+
 __all__ = ['insert_into_table', 'upsert_into_postgres_table']
